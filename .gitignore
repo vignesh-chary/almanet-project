@@ -1,0 +1,12 @@
+# Node.js dependencies
+node_modules/
+
+# React build output
+frontend/almanet/build/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+logs/
