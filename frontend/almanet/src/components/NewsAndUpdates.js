@@ -11,7 +11,7 @@ function NewsAndUpdates() {
           <p className="text-gray-500 text-sm">
             Excited to announce our new ML program designed for students passionate about data analysis.
           </p>
-          <button className="mt-2 h-8 px-4 bg-gray-200 text-gray-900 rounded-xl">Read More</button>
+          <button className="mt-2 h-8 px-4 bg-blue-600 text-white rounded-xl">Read More</button>
         </div>
       </div>
     </section>

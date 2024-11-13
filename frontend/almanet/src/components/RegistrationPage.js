@@ -1,89 +1,135 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const RegistrationPage = () => {
-  const userTypes = ['Student', 'Alumni', 'Mentor'];
-  const [selectedRole, setSelectedRole] = useState(null);
+  const userTypes = ['Student', 'Alumni'];
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    rollNumber: '',
+    password: '',
+    confirmPassword: '',
+    role: ''
+  });
 
-  const InputField = ({ label, placeholder, type = 'text' }) => {
-    return (
-      <div className="flex flex-col flex-1 shrink w-full basis-0 min-w-[160px] max-md:max-w-full px-4 py-3">
-        <label className="pb-2 w-full font-medium text-stone-900 max-md:max-w-full">
-          {label}
-        </label>
-        <input
-          type={type}
-          placeholder={placeholder}
-          className="overflow-hidden self-stretch px-4 py-4 w-full bg-white rounded-xl border border-solid border-stone-300 min-h-[56px] text-stone-500 max-md:max-w-full"
-        />
-      </div>
-    );
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const Button = ({ children, primary, secondary }) => {
-    const baseClasses = "flex overflow-hidden justify-center items-center px-5 w-full h-[48px] rounded-3xl min-w-[84px] max-md:max-w-full";
-    const primaryClasses = "text-white bg-blue-600";
-    const secondaryClasses = "bg-lime-50 text-stone-900";
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    return (
-      <button className={`${baseClasses} ${primary ? primaryClasses : ''} ${secondary ? secondaryClasses : ''}`}>
-        {children}
-      </button>
-    );
-  };
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
 
-  const RegistrationForm = () => {
-    return (
-      <div className="flex flex-col w-full max-w-[480px] justify-center align-items-center">
-        <InputField label="Full Name" placeholder="Full Name" />
-        <InputField label="Email Address" placeholder="Email Address (for login and communication)" type="email" />
-        <InputField label="Phone Number" placeholder="Phone Number (optional)" type="tel" />
-        <div className="flex flex-row gap-4 items-end px-4 py-3 max-md:max-w-full">
-          <InputField label="Password" placeholder="Password" type="password" />
-          <InputField label="Confirm Password" placeholder="Confirm Password" type="password" />
-        </div>
-        <div className="flex flex-row gap-3 items-start p-4 max-w-full text-sm font-medium whitespace-nowrap text-stone-900 w-[405px]">
-          <span>Role: </span>
-          {userTypes.map((type, index) => (
-            <button
-              key={index}
-              className={`self-stretch px-4 rounded-xl border border-solid border-stone-300 min-h-[44px] w-[100px] ${selectedRole === type ? 'bg-blue-600 text-white' : ''}`}
-              onClick={() => setSelectedRole(type)}
-            >
-              {type}
-            </button>
-          ))}
-        </div>
-        <Button primary>Register</Button>
-        <div className="mt-8">
-          <Link to="/login" className="flex overflow-hidden justify-center items-center px-5 w-full h-[48px] rounded-3xl bg-lime-50 text-stone-900">
-            Already registered? Login here
-          </Link>
-        </div>
-      </div>
-    );
+    try {
+      const response = await axios.post('http://localhost/almanet-api/register.php', {
+        full_name: formData.fullName,
+        email: formData.email,
+        roll_number: formData.rollNumber,
+        password: formData.password,
+        role: formData.role
+      });
+      console.log(response.data);
+
+      if (response.data.success) {
+        alert("Registration successful!");
+      } else {
+        alert(`Registration failed: ${response.data.message}`);
+      }
+    } catch (error) {
+      console.error("Error registering user:", error);
+      alert("An error occurred during registration. Please try again.");
+    }
   };
 
   return (
-    <main className="flex overflow-hidden flex-col bg-white">
-      <div className="w-full bg-white max-md:pr-5 max-md:max-w-full">
-        <div className="flex gap-5 max-md:flex-col">
-          <section className="flex flex-col w-[59%] max-md:ml-0 max-md:w-full">
-            <div className="flex bg-blue-600 bg-center bg-no-repeat bg-cover rounded-none bg-[url(https://cdn.builder.io/api/v1/image/assets%2F429991b1a8064bfb9c2ba368b8bc5166%2Fec095066492ca3c89e45298bcdfdd551a2b6659cd51caa5728515bc60dfa18c4)] max-w-[720px] min-h-[1024px]">
-              <h1 className="text-white text-7xl font-bold mt-12 ml-12">Welcome to alumanet</h1>
-            </div>
-            <div className="flex flex-col text-7xl font-bold text-center leading-[70px] max-w-[478px] text-zinc-100">
-              <div className="flex flex-col items-start" />
-            </div>
-          </section>
-          <section className="flex flex-col ml-5 w-[41%] max-md:ml-0 max-md:w-full">
-            <div className="flex overflow-hidden flex-col self-stretch my-auto w-full text-base min-h-[709px] max-md:mt-10 max-md:max-w-full">
-              <RegistrationForm />
-            </div>
-          </section>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <form onSubmit={handleSubmit} className="max-w-md w-full p-6 bg-white border border-gray-200 rounded-lg shadow-md">
+        <h2 className="text-2xl font-semibold text-center mb-6">Register</h2>
+
+        <input
+          type="text"
+          name="fullName"
+          value={formData.fullName}
+          onChange={handleChange}
+          placeholder="Full Name"
+          required
+          className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        />
+
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Email"
+          required
+          className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        />
+
+        <input
+          type="text"
+          name="rollNumber"
+          value={formData.rollNumber}
+          onChange={handleChange}
+          placeholder="Roll Number"
+          required
+          className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        />
+
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Password"
+          required
+          className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        />
+
+        <input
+          type="password"
+          name="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          placeholder="Confirm Password"
+          required
+          className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        />
+
+        <div className="mb-4">
+          <label className="block text-sm font-semibold mb-2">Role:</label>
+          <div className="flex gap-4">
+            {userTypes.map((type, index) => (
+              <label key={index} className="flex items-center">
+                <input
+                  type="radio"
+                  name="role"
+                  value={type}
+                  checked={formData.role === type}
+                  onChange={handleChange}
+                  required
+                  className="mr-2"
+                />
+                {type}
+              </label>
+            ))}
+          </div>
         </div>
-      </div>
-    </main>
+
+        <button type="submit" className="w-full p-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors duration-300">
+          Register
+        </button>
+
+        <div className="mt-4 text-center">
+          <Link to="/login" className="text-blue-500 hover:underline">Already registered? Login here</Link>
+        </div>
+      </form>
+    </div>
   );
 };
 

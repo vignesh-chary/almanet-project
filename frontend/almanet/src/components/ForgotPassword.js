@@ -55,7 +55,8 @@ const ForgotPassword = () => {
             <button className="flex items-center justify-center px-4 py-2 rounded-lg bg-gray-200 text-gray-500 font-medium text-base hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">
               Try another way
             </button>
-            <Link to="/login" className="flex items-center justify-center px-4 py-2 rounded-lg bg-transparent text-blue-500 font-medium text-base hover:underline focus:outline-none">
+            <Link to="/login" className="flex items-center justify-center px-4 py-2 rounded-lg border border-blue-500 bg-transparent text-blue-500 font-medium text-base hover:underline focus:outline-none"
+            >
               Back to sign in
             </Link>
           </div>
