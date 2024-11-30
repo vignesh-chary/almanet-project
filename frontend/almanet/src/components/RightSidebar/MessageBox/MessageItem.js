@@ -1,15 +1,18 @@
-// src/components/Sidebar/MessageBox/MessageItem.js
 import React from 'react';
 
-function MessageItem({ userName, timestamp, snippet, isUnread }) {
+function MessageItem({ userName, timestamp, snippet, isUnread, onClick }) {
   return (
-    <article className={`flex justify-between items-center px-4 py-3 mt-2 ${isUnread ? 'bg-lime-50 font-semibold' : 'bg-white'}`}>
+    <article
+      onClick={onClick}
+      className={`cursor-pointer flex justify-between items-center px-4 py-3 mt-2 rounded ${
+        isUnread ? 'bg-lime-50 font-semibold' : 'bg-white'
+      } hover:bg-gray-200`}
+    >
       <div className="flex items-center gap-4">
         <img
-          loading="lazy"
           src=""
           alt={`${userName}'s avatar`}
-          className="w-10 h-10 rounded-full"
+          className="w-10 h-10 rounded-full bg-gray-300"
         />
         <div className="flex flex-col">
           <span className="text-stone-900">{userName}</span>

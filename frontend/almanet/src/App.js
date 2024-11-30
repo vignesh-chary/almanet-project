@@ -11,8 +11,15 @@ import NewsAndUpdates from './components/NewsAndUpdates';
 import LoginPage from './components/LoginPage';
 import RegistrationPage from './components/RegistrationPage';
 import ForgotPassword from './components/ForgotPassword';
-import DashboardPage from './components/DashboardPage/DashboardPage'; // Import DashboardPage
-import ProfilePage from './components/Profile/ProfilePage'; // Import ProfilePage
+import DashboardPage from './pages/Dashboard';
+import ProfilePage from './components/Profile/ProfilePage';
+import AdminLayout from './components/AdminLayout'; // Import AdminLayout
+import AdminPage from './pages/AdminPage'; // Import AdminPage
+import NewsPage from './pages/NewsPage';
+import EventsPage from './pages/EventsPage';
+import AlumniPage from './pages/AlumniPage';
+import MessagingPage from './pages/MessagingPage';
+import ReportsPage from './pages/ReportsPage';
 
 // HomePage component to display the main sections
 function HomePage() {
@@ -47,21 +54,76 @@ function Layout({ children }) {
 function App() {
   return (
     <Router>
-      <Layout>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegistrationPage />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Routes>
+        {/* Public Routes */}
+        <Route
+          path="/"
+          element={
+            <Layout>
+              <HomePage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <Layout>
+              <LoginPage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <Layout>
+              <RegistrationPage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <Layout>
+              <ForgotPassword />
+            </Layout>
+          }
+        />
 
-          {/* Protected Route for DashboardPage */}
-          <Route path="/dashboard" element={<DashboardPage />} />
-          
-          {/* Route for ProfilePage */}
-          <Route path="/profile" element={<ProfilePage />} /> {/* Add this line */}
-        </Routes>
-      </Layout>
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <Layout>
+              <DashboardPage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <Layout>
+              <ProfilePage />
+            </Layout>
+          }
+        />
+
+        {/* Admin Routes */}
+        <Route
+          path="/admin/*"
+          element={
+            <AdminLayout>
+              <Routes>
+                <Route path="/" element={<AdminPage />} />
+                <Route path="news" element={<NewsPage />} />
+                <Route path="alumni" element={<AlumniPage />} />
+                <Route path="events" element={<EventsPage />} />
+                <Route path="messaging" element={<MessagingPage />} />
+                <Route path="reports" element={<ReportsPage />} />
+              </Routes>
+            </AdminLayout>
+          }
+        />
+      </Routes>
     </Router>
   );
 }
